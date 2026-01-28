@@ -16,7 +16,7 @@
 - React 
 - Vite
 - JavaScript
-- CSS רגיל
+- CSS 
 - LocalStorage
 
 ## מבנה הקומפוננטות
