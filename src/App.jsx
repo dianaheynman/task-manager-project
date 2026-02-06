@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import TaskForm from './components/TaskForm';
+import TaskList from './components/TaskList';
+import FilterBar from './components/FilterBar';
 import "./App.css";
-
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -20,7 +21,6 @@ function App() {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
-  // Save tasks to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -35,9 +35,17 @@ function App() {
   };
 
   const toggleTask = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+    let newTasks = [];
+    for (let i = 0; i < tasks.length; i++) {
+      let task = tasks[i];
+      if (task.id === id) {
+        let newTask = { ...task, completed: !task.completed };
+        newTasks.push(newTask);
+      } else {
+        newTasks.push(task);
+      }
+    }
+    setTasks(newTasks);
   };
 
   const deleteTask = (id) => {
@@ -50,11 +58,19 @@ function App() {
   };
 
   const saveTask = () => {
-    const trimmedText = editingText.trim();
+    let trimmedText = editingText.trim();
     if (!trimmedText) return;
-    setTasks(tasks.map(task =>
-      task.id === editingTaskId ? { ...task, text: trimmedText } : task
-    ));
+    let newTasks = [];
+    for (let i = 0; i < tasks.length; i++) {
+      let task = tasks[i];
+      if (task.id === editingTaskId) {
+        let newTask = { ...task, text: trimmedText };
+        newTasks.push(newTask);
+      } else {
+        newTasks.push(task);
+      }
+    }
+    setTasks(newTasks);
     setEditingTaskId(null);
     setEditingText("");
   };
@@ -70,51 +86,53 @@ function App() {
 
   const activeCount = tasks.filter(task => !task.completed).length;
 
-  const filteredTasks = tasks.filter(task => {
-    if (filter === "active") return !task.completed;
-    if (filter === "completed") return task.completed;
-    return true;
-  });
+  let filteredTasks = [];
+  for (let i = 0; i < tasks.length; i++) {
+    let task = tasks[i];
+    let shouldInclude = false;
+    if (filter === "active") {
+      if (!task.completed) {
+        shouldInclude = true;
+      }
+    } else if (filter === "completed") {
+      if (task.completed) {
+        shouldInclude = true;
+      }
+    } else {
+      shouldInclude = true;
+    }
+    if (shouldInclude) {
+      filteredTasks.push(task);
+    }
+  }
 
   return (
-    <div>
-      <h1>Task Manager</h1>
-      <TaskForm onAdd={addTask} />
-      <div>
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("active")}>Active</button>
-        <button onClick={() => setFilter("completed")}>Completed</button>
-        <button onClick={clearCompleted}>Clear Completed</button>
+    <div className="app">
+      <div className="app-header">
+        <h1>Task Manager</h1>
       </div>
-      <ul>
-        {filteredTasks.map(task => (
-          <li key={task.id}>
-            {editingTaskId === task.id ? (
-              <>
-                <input
-                  type="text"
-                  value={editingText}
-                  onChange={(e) => setEditingText(e.target.value)}
-                />
-                <button onClick={saveTask}>Save</button>
-                <button onClick={cancelEdit}>Cancel</button>
-              </>
-            ) : (
-              <>
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => toggleTask(task.id)}
-                />
-                {task.text}
-                <button onClick={() => startEdit(task)}>Edit</button>
-                <button onClick={() => deleteTask(task.id)}>Delete</button>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
-      <div>Active tasks: {activeCount}</div>
+      
+      <TaskForm onAdd={addTask} />
+      
+      <FilterBar 
+        currentFilter={filter} 
+        onFilterChange={setFilter}
+        onClearCompleted={clearCompleted}
+      />
+      
+      <TaskList
+        tasks={filteredTasks}
+        editingTaskId={editingTaskId}
+        editingText={editingText}
+        onToggle={toggleTask}
+        onDelete={deleteTask}
+        onStartEdit={startEdit}
+        onSaveEdit={saveTask}
+        onCancelEdit={cancelEdit}
+        onEditTextChange={setEditingText}
+      />
+      
+      <div className="app-footer">Active tasks: {activeCount}</div>
     </div>
   );
 }
