@@ -32,7 +32,7 @@ body {
   letter-spacing: -0.5px;
 }
 
-/* Task Form Styles */
+
 .task-form {
   display: flex;
   gap: 12px;
@@ -83,7 +83,7 @@ body {
   transform: scale(0.98);
 }
 
-/* Filter Buttons Styles */
+
 .filters {
   display: flex;
   gap: 10px;
@@ -115,7 +115,7 @@ body {
   border-color: #3b82f6;
 }
 
-/* Task List Styles */
+
 .task-list {
   list-style: none;
   padding: 0;
@@ -204,7 +204,7 @@ body {
   border-color: #93c5fd;
 }
 
-/* Inline Edit Form */
+
 .task-edit-inline {
   display: flex;
   gap: 8px;
@@ -255,7 +255,7 @@ body {
   background: #dc2626;
 }
 
-/* Footer */
+
 .app-footer {
   text-align: center;
   font-size: 14px;
