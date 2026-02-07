@@ -4,14 +4,8 @@
 
 body {
   margin: 0;
+  background: #f3f4f6;
   min-height: 100vh;
-
-  
-  background-color: #f7f7fb;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cg transform='translate(40 180) rotate(-25)' font-family='Arial' font-size='28' font-weight='700'%3E%3Ctext fill='rgba(236,72,153,0.10)' x='0' y='0'%3ETO DO LIST%3C/text%3E%3Ctext fill='rgba(148,163,184,0.10)' x='0' y='42'%3ETO DO LIST%3C/text%3E%3C/g%3E%3C/svg%3E");
-  background-size: 320px 320px;
-  background-repeat: repeat;
-  background-attachment: fixed;
 }
 
 #root {
